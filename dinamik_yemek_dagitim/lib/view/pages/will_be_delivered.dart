@@ -1,10 +1,9 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
+import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/themes/theme.dart';
 
 class WillBeDelivered extends StatefulWidget {
   const WillBeDelivered({super.key});
@@ -16,7 +15,7 @@ class WillBeDelivered extends StatefulWidget {
 class _WillBeDeliveredState extends State<WillBeDelivered> {
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
-      padding: context.paddingDefault,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(13)),
           color: Theme.of(context).colorScheme.onBackground,
@@ -27,10 +26,6 @@ class _WillBeDeliveredState extends State<WillBeDelivered> {
       ),
     ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)));
   }
-
-  // Widget _cartItems() {
-  //   return Column(children: ApxpData.cartList.map((x) => _item(x)).toList());
-  // }
 
   Widget _search() {
     return Container(
@@ -64,7 +59,7 @@ class _WillBeDeliveredState extends State<WillBeDelivered> {
 
   Container persons() {
     return Container(
-      margin: context.paddingHorizontal,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Container(
         padding: const EdgeInsets.all(20),
         alignment: Alignment.center,

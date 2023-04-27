@@ -2,14 +2,17 @@ import 'package:dinamik_yemek_dagitim/config/route.dart';
 import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/routing/custom_route.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/home_page.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
               builder: (BuildContext context) => const MyHomePage());
         } else {
           return CustomRoute<bool>(
-              builder: (BuildContext context) => const NfcCardReader());
+              builder: (BuildContext context) => const LoginScreen());
         }
       },
       initialRoute: "MainPage",

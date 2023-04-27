@@ -26,7 +26,7 @@ class MainPageState extends State<MainPage> {
       padding: AppTheme.padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           RotatedBox(
             quarterTurns: 4,
             child: InkWell(
@@ -41,7 +41,7 @@ class MainPageState extends State<MainPage> {
             child: Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
-                boxShadow: <BoxShadow>[
+                boxShadow: [
                   BoxShadow(
                       color: Color(0xfff8f8f8),
                       blurRadius: 10,
@@ -81,10 +81,10 @@ class MainPageState extends State<MainPage> {
         margin: AppTheme.padding,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          children:[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: [
                 TitleText(
                   text:
                       isHomePageSelected ? 'Yemek Verilecek' : 'Yemek Verilmiş',
@@ -131,7 +131,7 @@ class MainPageState extends State<MainPage> {
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
-          children: <Widget>[
+          children: [
             SingleChildScrollView(
               child: Container(
                 height: AppTheme.fullHeight(context) - 50,
@@ -147,7 +147,7 @@ class MainPageState extends State<MainPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     _appBar(),
                     _title(),
                     Expanded(
