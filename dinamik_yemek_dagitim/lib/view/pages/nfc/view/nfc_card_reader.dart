@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
+import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
@@ -15,7 +17,7 @@ class _NfcCardReaderState extends State<NfcCardReader> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: double.infinity,
         width: double.infinity,
         child: SafeArea(
@@ -23,44 +25,70 @@ class _NfcCardReaderState extends State<NfcCardReader> {
             future: NfcManager.instance.isAvailable(),
             builder: (context, snapshot) => snapshot.data != true
                 ? Center(
-                    child: Text('NfcManager.isAvailable(): ${snapshot.data}'))
-                : Flex(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    direction: Axis.vertical,
+                    child: Text(
+                    'Telefonunuzda NFC özelliğini açın! ${snapshot.data}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: LightColor.orange,
+                    ),
+                  ))
+                : Stack(
                     children: [
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          margin: const EdgeInsets.all(4),
-                          constraints: const BoxConstraints.expand(),
-                          decoration: BoxDecoration(border: Border.all()),
-                          child: SingleChildScrollView(
-                            child: ValueListenableBuilder<dynamic>(
-                              valueListenable: result,
-                              builder: (context, value, child) =>
-                                  Text('${value ?? ''}'),
-                            ),
-                          ),
+                      OverflowBox(
+                        maxWidth: 800,
+                        maxHeight: 800,
+                        child: Icon(
+                          Icons.document_scanner_outlined,
+                          size: 400,
+                          color: LightColor.orange.withOpacity(0.6),
                         ),
                       ),
-                      Flexible(
-                        flex: 3,
-                        child: GridView.count(
-                          padding: const EdgeInsets.all(4),
-                          crossAxisCount: 2,
-                          childAspectRatio: 4,
-                          crossAxisSpacing: 4,
-                          mainAxisSpacing: 4,
-                          children: [
-                            ElevatedButton(
-                                onPressed: _tagRead,
-                                child: const Text('Bas ve Okut')),
-                            // ElevatedButton(
-                            //     child: Text('Ndef Write'), onPressed: _ndefWrite),
-                            // ElevatedButton(
-                            //     child: Text('Ndef Write Lock'),
-                            //     onPressed: _ndefWriteLock),
-                          ],
+                      //! NFC ile bilgi aldığım kısım
+
+                      // Flexible(
+                      //   flex: 2,
+                      //   child: Container(
+                      //     margin: const EdgeInsets.all(4),
+                      //     constraints: const BoxConstraints.expand(),
+                      //     decoration: BoxDecoration(border: Border.all()),
+                      //     child: SingleChildScrollView(
+                      //       child: ValueListenableBuilder<dynamic>(
+                      //         valueListenable: result,
+                      //         builder: (context, value, child) =>
+                      //             Text('${value ?? ''}'),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      Positioned(
+                        top: context.dynamicHeight / 1.4,
+                        left: context.dynamicWidth / 3.2,
+                        child: SizedBox(
+                          height: context.dynamicHeight * 0.5,
+                          width: context.dynamicWidth * 0.8,
+                          child: Flexible(
+                            flex: 3,
+                            child: GridView.count(
+                              padding: const EdgeInsets.all(4),
+                              crossAxisCount: 2,
+                              childAspectRatio: 4,
+                              crossAxisSpacing: 4,
+                              mainAxisSpacing: 4,
+                              children: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: LightColor.orange,
+                                    ),
+                                    onPressed: _tagRead,
+                                    child: const Text('Bas ve Okut')),
+                                // ElevatedButton(
+                                //     child: Text('Ndef Write'), onPressed: _ndefWrite),
+                                // ElevatedButton(
+                                //     child: Text('Ndef Write Lock'),
+                                //     onPressed: _ndefWriteLock),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int)? onIconPresedCallback;
-  const CustomBottomNavigationBar({this.onIconPresedCallback});
+  const CustomBottomNavigationBar({super.key, this.onIconPresedCallback});
 
   @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
+  CustomBottomNavigationBarState createState() =>
+      CustomBottomNavigationBarState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with TickerProviderStateMixin {
   int _selectedIndex = 0;
 
@@ -63,7 +63,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   Widget _icon(IconData icon, bool isEnable, int index, {double? size}) {
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
+        borderRadius: const BorderRadius.all(Radius.circular(50)),
         onTap: () {
           _handlePressed(index);
         },
@@ -132,7 +132,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        _yController.animateTo(1.0, duration: const Duration(milliseconds: 1200));
+        _yController.animateTo(1.0,
+            duration: const Duration(milliseconds: 1200));
       },
     );
     _yController.animateTo(0.0, duration: const Duration(milliseconds: 300));
@@ -141,7 +142,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   @override
   Widget build(BuildContext context) {
     final appSize = MediaQuery.of(context).size;
-    const  height = 60.0;
+    const height = 60.0;
     return SizedBox(
       width: appSize.width,
       height: context.dynamicHeight * 0.09,
