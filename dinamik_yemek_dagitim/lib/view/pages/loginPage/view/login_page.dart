@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         bottom: false,
         child: Padding(
-          padding:const EdgeInsets.symmetric(horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(horizontal: 50.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,8 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       PasswordField(
                           fadePassword: _elementsOpacity == 0,
                           passwordController: passwordController),
-                     const  SizedBox(height: 60),
+                      const SizedBox(height: 60),
                       GetStartedButton(
+                        name: 'Giriş Yap',
                         elementsOpacity: _elementsOpacity,
                         onTap: () {
                           setState(() {
@@ -79,14 +80,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                         onAnimatinoEnd: () async {
-                          await Future.delayed(const Duration(milliseconds: 500), () {
+                          await Future.delayed(
+                              const Duration(milliseconds: 500), () {
                             setState(() {
                               loadingBallAppear = true;
                             });
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>const  MainPage()));
+                                    builder: (context) => const MainPage()));
                           });
                         },
                       )

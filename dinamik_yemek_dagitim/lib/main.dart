@@ -3,6 +3,7 @@ import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/routing/custom_route.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/home_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
               builder: (BuildContext context) => const MyHomePage());
         } else {
           return CustomRoute<bool>(
-              builder: (BuildContext context) => const NfcCardReader());
+              builder: (BuildContext context) => const LoginScreen());
         }
       },
       initialRoute: "MainPage",

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class GetStartedButton extends StatefulWidget {
   final Function onTap;
-  final Function onAnimatinoEnd;
+  final Function? onAnimatinoEnd;
   final double elementsOpacity;
+  final String name;
   const GetStartedButton(
       {required this.onTap,
-      required this.onAnimatinoEnd,
-      required this.elementsOpacity});
+      this.onAnimatinoEnd,
+      required this.elementsOpacity,
+      required this.name});
 
   @override
   State<GetStartedButton> createState() => _GetStartedButtonState();
@@ -20,7 +22,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
       duration: Duration(milliseconds: 300),
       tween: Tween(begin: 1, end: widget.elementsOpacity),
       onEnd: () async {
-        widget.onAnimatinoEnd();
+        widget.onAnimatinoEnd!();
       },
       builder: (_, value, __) => GestureDetector(
         onTap: () {
@@ -39,7 +41,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Giriş Yap",
+                  widget.name,
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,

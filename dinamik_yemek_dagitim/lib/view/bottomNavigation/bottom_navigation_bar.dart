@@ -50,7 +50,7 @@ class CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     final startX = (appWidth - buttonsWidth) / 2;
     return startX +
         index.toDouble() * buttonsWidth / buttonCount +
-        buttonsWidth / (buttonCount * 2.0);
+        buttonsWidth / (buttonCount * 1.5);
   }
 
   @override

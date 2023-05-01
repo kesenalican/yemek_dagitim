@@ -16,18 +16,17 @@ class _NfcCardReaderState extends State<NfcCardReader> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
+    return SizedBox(
         height: double.infinity,
         width: double.infinity,
         child: SafeArea(
           child: FutureBuilder<bool>(
             future: NfcManager.instance.isAvailable(),
             builder: (context, snapshot) => snapshot.data != true
-                ? Center(
+                ? const Center(
                     child: Text(
-                    'Telefonunuzda NFC özelliğini açın! ${snapshot.data}',
-                    style: const TextStyle(
+                    'Telefonunuzda NFC özelliğini açın!',
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: LightColor.orange,
                     ),
@@ -95,7 +94,7 @@ class _NfcCardReaderState extends State<NfcCardReader> {
                   ),
           ),
         ),
-      ),
+      
     );
   }
 

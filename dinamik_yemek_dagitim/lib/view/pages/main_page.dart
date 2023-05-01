@@ -3,6 +3,9 @@ import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/main.dart';
 import 'package:dinamik_yemek_dagitim/view/bottomNavigation/bottom_navigation_bar.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/save_user.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/tabs/person_info.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/will_be_delivered.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,8 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   //? LOGOUT APPBAR
   bool isHomePageSelected = true;
+  bool nfcSelected = false;
+  int pageIndex = 0;
   Widget _appBar() {
     return Container(
       padding: AppTheme.padding,
@@ -81,21 +86,34 @@ class MainPageState extends State<MainPage> {
         margin: AppTheme.padding,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children:[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                TitleText(
-                  text:
-                      isHomePageSelected ? 'Yemek Verilecek' : 'Yemek Verilmiş',
-                  fontSize: 27,
-                  fontWeight: FontWeight.w400,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleText(
+                      text: isHomePageSelected
+                          ? 'Yemek Verilecek'
+                          : 'Yemek Verilmiş',
+                      fontSize: 27,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    TitleText(
+                      text: isHomePageSelected ? 'Kişiler' : 'Kişiler',
+                      fontSize: 27,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ],
                 ),
-                TitleText(
-                  text: isHomePageSelected ? 'Kişiler' : 'Kişiler',
-                  fontSize: 27,
-                  fontWeight: FontWeight.w700,
-                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SaveUser()));
+                    },
+                    icon: Icon(Icons.add))
               ],
             ),
             const Spacer(),
@@ -114,12 +132,20 @@ class MainPageState extends State<MainPage> {
   }
 
   void onBottomIconPressed(int index) {
-    if (index == 0 || index == 1) {
+    if (index == 0) {
       setState(() {
         isHomePageSelected = true;
+        pageIndex = 0;
+      });
+    } else if (index == 1) {
+      setState(() {
+        isHomePageSelected = false;
+        pageIndex = 1;
+        nfcSelected = true;
       });
     } else {
       setState(() {
+        pageIndex = 2;
         isHomePageSelected = false;
       });
     }
@@ -148,21 +174,23 @@ class MainPageState extends State<MainPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _appBar(),
-                    _title(),
+                    pageIndex != 1 ? _appBar() : const SizedBox(),
+                    pageIndex != 1 ? _title() : const SizedBox(),
                     Expanded(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         switchInCurve: Curves.easeInToLinear,
                         switchOutCurve: Curves.easeOutBack,
-                        child: isHomePageSelected
-                            ? const MyHomePage(
-                                title: '',
-                              )
-                            : const Align(
-                                alignment: Alignment.topCenter,
-                                child: WillBeDelivered(),
-                              ),
+                        child: pageIndex == 1
+                            ? const NfcCardReader()
+                            : pageIndex == 0
+                                ? const MyHomePage(
+                                    title: '',
+                                  )
+                                : const Align(
+                                    alignment: Alignment.topCenter,
+                                    child: WillBeDelivered(),
+                                  ),
                       ),
                     )
                   ],
