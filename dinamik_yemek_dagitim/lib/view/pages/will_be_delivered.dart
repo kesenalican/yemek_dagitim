@@ -82,7 +82,7 @@ class _WillBeDeliveredState extends State<WillBeDelivered> {
         child: Row(
           children: const [
             TitleText(
-              text: 'Blabla mahallesi',
+              text: 'Blabla falan',
               fontWeight: FontWeight.w700,
               fontSize: 15,
             ),

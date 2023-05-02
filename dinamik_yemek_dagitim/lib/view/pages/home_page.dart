@@ -37,11 +37,7 @@ class MyHomePageState extends State<MyHomePage> {
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
-          InkWell(
-            onTap: () {
-              
-            },
-            child: persons()),
+          InkWell(onTap: () {}, child: persons()),
           persons(),
           persons(),
           persons(),
@@ -97,7 +93,7 @@ class MyHomePageState extends State<MyHomePage> {
         child: Row(
           children: const [
             TitleText(
-              text: 'Kayaönü mahallesi',
+              text: 'Alican Kesen',
               fontWeight: FontWeight.w700,
               fontSize: 15,
             ),
