@@ -3,6 +3,7 @@ import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/main.dart';
 import 'package:dinamik_yemek_dagitim/view/bottomNavigation/bottom_navigation_bar.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/google_map.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/save_user.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/tabs/person_info.dart';
@@ -113,7 +114,15 @@ class MainPageState extends State<MainPage> {
                           MaterialPageRoute(
                               builder: (context) => const SaveUser()));
                     },
-                    icon: Icon(Icons.add))
+                    icon: const Icon(Icons.add)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OpenMap()));
+                    },
+                    icon: const Icon(Icons.map)),
               ],
             ),
             const Spacer(),

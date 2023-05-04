@@ -6,10 +6,11 @@ import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart'
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const ProviderScope(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
