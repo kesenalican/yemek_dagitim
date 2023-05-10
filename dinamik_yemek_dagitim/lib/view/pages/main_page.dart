@@ -11,7 +11,7 @@ import 'package:dinamik_yemek_dagitim/view/pages/will_be_delivered.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/themes/theme.dart';
-import 'home_page.dart';
+import 'homepage/view/home_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, this.title});

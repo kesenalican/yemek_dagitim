@@ -1,7 +1,7 @@
 import 'package:dinamik_yemek_dagitim/config/route.dart';
 import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/routing/custom_route.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/home_page.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/homepage/view/home_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';

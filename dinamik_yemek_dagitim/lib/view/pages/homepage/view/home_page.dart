@@ -2,10 +2,13 @@ import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/homepage/model/consumer_model.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/homepage/service/consumer_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key, this.title});
 
   final String? title;
@@ -14,7 +17,8 @@ class MyHomePage extends StatefulWidget {
   MyHomePageState createState() => MyHomePageState();
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends ConsumerState<MyHomePage> {
+  List<ConsumerListModel> consumerList = [];
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
       padding: context.paddingDefault,
@@ -167,6 +171,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var getConsumers = ref.watch(getConsumer);
     return SizedBox(
       height: MediaQuery.of(context).size.height - 210,
       child: SingleChildScrollView(
@@ -178,7 +183,45 @@ class MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               _search(),
-              _categoryWidget(),
+              //_categoryWidget(),
+              getConsumers.when(
+                  data: (data) {
+                    //consumerList = data.map((e) => e).toList();
+                    return SizedBox(
+                      height: context.dynamicHeight * 0.7,
+                      child: ListView.builder(
+                        itemCount: consumerList.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.all(5),
+                            child: Card(
+                              elevation: 4,
+                              color: Colors.orange,
+                              margin: EdgeInsets.zero,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    context.dynamicHeight * 0.01),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: context.dynamicWidth * 0.01,
+                                    ),
+                                    Text(consumerList[index].name),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  error: (err, stack) {
+                    return Center(
+                      child: Text('Hata ${err.toString()}'),
+                    );
+                  },
+                  loading: () => const CircularProgressIndicator()),
               //_productWidget(),
             ],
           ),
