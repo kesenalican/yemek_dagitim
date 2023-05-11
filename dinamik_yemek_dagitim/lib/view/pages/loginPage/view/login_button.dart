@@ -32,7 +32,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
           opacity: value,
           child: Container(
             width: 230,
-            height: 75,
+            height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color.fromARGB(255, 224, 227, 231),

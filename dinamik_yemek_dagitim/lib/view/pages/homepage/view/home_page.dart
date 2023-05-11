@@ -4,6 +4,7 @@ import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/homepage/model/consumer_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/homepage/service/consumer_service.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/homepage/viewmodel/consumer_view_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,40 +108,8 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
     );
   }
 
-  // Widget _productWidget() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(vertical: 10),
-  //     width: AppTheme.fullWidth(context),
-  //     height: AppTheme.fullWidth(context) * .7,
-  //     child: GridView(
-  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 1,
-  //           childAspectRatio: 4 / 3,
-  //           mainAxisSpacing: 30,
-  //           crossAxisSpacing: 20),
-  //       padding: EdgeInsets.only(left: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       children: AppData.productList
-  //           .map(
-  //             (product) => ProductCard(
-  //               product: product,
-  //               onSelected: (model) {
-  //                 setState(() {
-  //                   AppData.productList.forEach((item) {
-  //                     item.isSelected = false;
-  //                   });
-  //                   model.isSelected = true;
-  //                 });
-  //               },
-  //             ),
-  //           )
-  //           .toList(),
-  //     ),
-  //   );
-  // }
-
   Widget _search() {
-    return Container(
+    return Card(
       margin: AppTheme.padding,
       child: Row(
         children: <Widget>[
@@ -151,8 +120,8 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
               decoration: BoxDecoration(
                   color: LightColor.lightGrey.withAlpha(100),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextFormField(
+                decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Kişi Ara",
                     hintStyle: TextStyle(fontSize: 12),
@@ -172,6 +141,7 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var getConsumers = ref.watch(getConsumer);
+    var viewModel = ref.watch(consumerViewModel);
     return SizedBox(
       height: MediaQuery.of(context).size.height - 210,
       child: SingleChildScrollView(
@@ -186,29 +156,45 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
               //_categoryWidget(),
               getConsumers.when(
                   data: (data) {
-                    //consumerList = data.map((e) => e).toList();
-                    return SizedBox(
+                    consumerList = viewModel.consumerList!;
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
                       height: context.dynamicHeight * 0.7,
+                      width: AppTheme.fullWidth(context),
                       child: ListView.builder(
                         itemCount: consumerList.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: const EdgeInsets.all(5),
-                            child: Card(
-                              elevation: 4,
-                              color: Colors.orange,
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                    context.dynamicHeight * 0.01),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: context.dynamicWidth * 0.01,
-                                    ),
-                                    Text(consumerList[index].name),
-                                  ],
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 15),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                color: LightColor.background,
+                                border: Border.all(
+                                  color: LightColor.orange,
+                                  width: 2,
                                 ),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0xfffbf2ef),
+                                    blurRadius: 10,
+                                    spreadRadius: 5,
+                                    offset: Offset(5, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  TitleText(
+                                    text: consumerList[index].name,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ],
                               ),
                             ),
                           );

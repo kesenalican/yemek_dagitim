@@ -2,21 +2,48 @@ import 'dart:typed_data';
 
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/nfc/model/nfc_model.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/nfc/service/nfc_service.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/nfc/viewmodel/nfc_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
-class NfcCardReader extends StatefulWidget {
+class NfcCardReader extends ConsumerStatefulWidget {
   const NfcCardReader({super.key});
 
   @override
-  State<NfcCardReader> createState() => _NfcCardReaderState();
+  ConsumerState<NfcCardReader> createState() => _NfcCardReaderState();
 }
 
-class _NfcCardReaderState extends State<NfcCardReader> {
+class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
+  Location location = Location();
+  String latitude = '';
+  String longitude = '';
+  String gonderilecekLocation = '';
+  bool serviceEnabled = false;
+  PermissionStatus? permissionGranted;
+  LocationData? locationData;
+  Future<dynamic> getLocation() async {
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) serviceEnabled = await location.requestService();
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+    }
+    locationData = await location.getLocation();
+    latitude = locationData!.latitude.toString();
+    longitude = locationData!.longitude.toString();
+    gonderilecekLocation = '$latitude, $longitude';
+  }
+
   ValueNotifier<dynamic> result = ValueNotifier(null);
   @override
   Widget build(BuildContext context) {
+    var viewModel = ref.watch(nfcViewModel);
     return SizedBox(
       height: double.infinity,
       width: double.infinity,
@@ -47,12 +74,13 @@ class _NfcCardReaderState extends State<NfcCardReader> {
                         onPressed: () {
                           setState(() {
                             _tagRead();
+                            getLocation().then((value) {
+                              print(value);
+                            });
                           });
                         },
-                        icon: Icon(Icons.read_more_outlined)),
-
+                        icon: const Icon(Icons.read_more_outlined)),
                     //! NFC ile bilgi aldığım kısım
-
                     ValueListenableBuilder<dynamic>(
                       valueListenable: result,
                       builder: (context, value, child) =>
@@ -108,6 +136,14 @@ class _NfcCardReaderState extends State<NfcCardReader> {
       NfcManager.instance.stopSession();
       setState(() {
         Fluttertoast.showToast(msg: 'KART BAŞARIYLA OKUNDU');
+        print(result.value['nfca']['identifier']);
+        var bytes = result.value['nfca']['identifier'];
+        var serialNumber = bytes
+            .map((b) => b.toRadixString(16).padLeft(2, '0'))
+            .join(':')
+            .toUpperCase();
+        ref.watch(nfcReader(NfcModel(
+            coordinate: gonderilecekLocation, cardNumber: serialNumber)));
       });
     });
   }

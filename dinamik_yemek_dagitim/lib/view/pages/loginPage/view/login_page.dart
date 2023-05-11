@@ -46,7 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 70),
+                  const SizedBox(height: 50),
                   TweenAnimationBuilder<double>(
                     duration: const Duration(milliseconds: 300),
                     tween: Tween(begin: 1, end: _elementsOpacity),
