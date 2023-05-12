@@ -87,7 +87,7 @@ class ConsumerListModel {
         street: json["street"],
         buildNo: json["buildNo"],
         doorNo: json["doorNo"],
-        detail: json["detail"],
+        detail: json["detail"] ?? '',
         coordinate: json["coordinate"],
         id: json["id"],
         createDate: DateTime.parse(json["createDate"]),

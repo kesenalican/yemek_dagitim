@@ -7,7 +7,7 @@ import 'package:dinamik_yemek_dagitim/view/pages/google_map.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/save_user.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/saveUser/view/tabs/person_info.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/will_be_delivered.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/view/will_be_delivered.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/themes/theme.dart';
@@ -107,22 +107,22 @@ class MainPageState extends State<MainPage> {
                     ),
                   ],
                 ),
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SaveUser()));
-                    },
-                    icon: const Icon(Icons.add)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const OpenMap()));
-                    },
-                    icon: const Icon(Icons.map)),
+                // IconButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => const SaveUser()));
+                //     },
+                //     icon: const Icon(Icons.add)),
+                // IconButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => const OpenMap()));
+                //     },
+                //     icon: const Icon(Icons.map)),
               ],
             ),
             const Spacer(),

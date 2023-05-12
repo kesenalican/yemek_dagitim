@@ -1,7 +1,7 @@
 import 'package:dinamik_yemek_dagitim/view/pages/homepage/view/home_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/will_be_delivered.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/view/will_be_delivered.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

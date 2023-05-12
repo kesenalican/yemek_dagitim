@@ -145,72 +145,70 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
     return SizedBox(
       height: MediaQuery.of(context).size.height - 210,
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        dragStartBehavior: DragStartBehavior.down,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _search(),
-              //_categoryWidget(),
-              getConsumers.when(
-                  data: (data) {
-                    consumerList = viewModel.consumerList!;
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      height: context.dynamicHeight * 0.7,
-                      width: AppTheme.fullWidth(context),
-                      child: ListView.builder(
-                        itemCount: consumerList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                color: LightColor.background,
-                                border: Border.all(
-                                  color: LightColor.orange,
-                                  width: 2,
+        // physics: const BouncingScrollPhysics(),
+        // dragStartBehavior: DragStartBehavior.down,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            _search(),
+            //_categoryWidget(),
+            getConsumers.when(
+                data: (data) {
+                  consumerList = viewModel.consumerList!;
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    height: context.dynamicHeight * 0.7,
+                    width: AppTheme.fullWidth(context),
+                    child: ListView.builder(
+                      itemCount: consumerList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: LightColor.background,
+                              border: Border.all(
+                                color: LightColor.orange,
+                                width: 2,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xfffbf2ef),
+                                  blurRadius: 10,
+                                  spreadRadius: 5,
+                                  offset: Offset(5, 5),
                                 ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0xfffbf2ef),
-                                    blurRadius: 10,
-                                    spreadRadius: 5,
-                                    offset: Offset(5, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  TitleText(
-                                    text: consumerList[index].name,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ],
-                              ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  error: (err, stack) {
-                    return Center(
-                      child: Text('Hata ${err.toString()}'),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator()),
-              //_productWidget(),
-            ],
-          ),
+                            child: Row(
+                              children: [
+                                TitleText(
+                                  text: consumerList[index].name,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                error: (err, stack) {
+                  return Center(
+                    child: Text('Hata ${err.toString()}'),
+                  );
+                },
+                loading: () => const CircularProgressIndicator()),
+            //_productWidget(),
+          ],
         ),
       ),
     );

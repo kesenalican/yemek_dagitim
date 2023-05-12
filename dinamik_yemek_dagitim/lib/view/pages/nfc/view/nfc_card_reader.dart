@@ -44,6 +44,8 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   @override
   Widget build(BuildContext context) {
     var viewModel = ref.watch(nfcViewModel);
+    _tagRead();
+    getLocation();
     return SizedBox(
       height: double.infinity,
       width: double.infinity,
@@ -70,22 +72,17 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
                         color: LightColor.orange.withOpacity(0.6),
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _tagRead();
-                            getLocation().then((value) {
-                              print(value);
-                            });
-                          });
-                        },
-                        icon: const Icon(Icons.read_more_outlined)),
-                    //! NFC ile bilgi aldığım kısım
-                    ValueListenableBuilder<dynamic>(
-                      valueListenable: result,
-                      builder: (context, value, child) =>
-                          Text('${value ?? ''}'),
-                    ),
+                    // IconButton(
+                    //     onPressed: () {
+                    //       setState(() {});
+                    //     },
+                    //     icon: const Icon(Icons.read_more_outlined)),
+                    // //! NFC ile bilgi aldığım kısım
+                    // ValueListenableBuilder<dynamic>(
+                    //   valueListenable: result,
+                    //   builder: (context, value, child) =>
+                    //       Text('${value ?? ''}'),
+                    // ),
                     // Positioned(
                     //   top: context.dynamicHeight / 1.4,
                     //   left: context.dynamicWidth / 3.2,
