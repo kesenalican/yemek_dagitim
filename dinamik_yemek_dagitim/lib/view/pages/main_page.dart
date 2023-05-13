@@ -95,13 +95,13 @@ class MainPageState extends State<MainPage> {
                   children: [
                     TitleText(
                       text: isHomePageSelected
-                          ? 'Yemek Verilecek'
-                          : 'Yemek Verilmiş',
+                          ? 'Yemek Dağıtım'
+                          : 'Yemek Verilecek',
                       fontSize: 27,
                       fontWeight: FontWeight.w400,
                     ),
                     TitleText(
-                      text: isHomePageSelected ? 'Kişiler' : 'Kişiler',
+                      text: isHomePageSelected ? 'Listesi' : 'Kişiler',
                       fontSize: 27,
                       fontWeight: FontWeight.w700,
                     ),

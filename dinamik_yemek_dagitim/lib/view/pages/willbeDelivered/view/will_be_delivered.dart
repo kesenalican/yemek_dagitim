@@ -44,13 +44,13 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
                   return Theme(
                     data: Theme.of(context).copyWith(
                       colorScheme: const ColorScheme.light(
-                        primary: Colors.orange,
+                        primary: LightColor.orange,
                         onPrimary: Colors.white,
-                        onSurface: Colors.orange,
+                        onSurface: LightColor.orange,
                       ),
                       textButtonTheme: TextButtonThemeData(
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.orange,
+                          foregroundColor: LightColor.orange,
                         ),
                       ),
                     ),
@@ -173,76 +173,81 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
     var getDelivery = ref.watch(getDeliveryList(orderDate.toIso8601String()));
     var viewModel = ref.watch(deliverViewModel);
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 210,
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        dragStartBehavior: DragStartBehavior.down,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _search(),
-              //_categoryWidget(),
-              //_productWidget(),
+      height: MediaQuery.of(context).size.height - 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _search(),
+          //_categoryWidget(),
+          //_productWidget(),
 
-              getDelivery.when(
-                  data: (data) {
-                    deliverList = viewModel.deliverList!;
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      height: context.dynamicHeight * 0.7,
-                      width: AppTheme.fullWidth(context),
-                      child: ListView.builder(
-                        itemCount: deliverList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                color: LightColor.background,
-                                border: Border.all(
-                                  color: LightColor.orange,
-                                  width: 2,
+          getDelivery.when(
+              data: (data) {
+                if (viewModel.deliverList != null) {
+                  deliverList = viewModel.deliverList!;
+                }
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  height: context.dynamicHeight * 0.6,
+                  width: AppTheme.fullWidth(context),
+                  child: deliverList.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: deliverList.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  color: LightColor.background,
+                                  border: Border.all(
+                                    color: LightColor.orange,
+                                    width: 2,
+                                  ),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xfffbf2ef),
+                                      blurRadius: 10,
+                                      spreadRadius: 5,
+                                      offset: Offset(5, 5),
+                                    ),
+                                  ],
                                 ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0xfffbf2ef),
-                                    blurRadius: 10,
-                                    spreadRadius: 5,
-                                    offset: Offset(5, 5),
-                                  ),
-                                ],
+                                child: Row(
+                                  children: [
+                                    TitleText(
+                                      text: deliverList[index].consumerName,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  TitleText(
-                                    text: deliverList[index].consumerName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  error: (err, stack) {
-                    return Center(
-                      child: Text('Hata ${err.toString()}'),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator()),
-            ],
-          ),
-        ),
+                            );
+                          },
+                        )
+                      : const Center(
+                          child: Text(
+                            'Bugüne ait dağıtım listesi bulunamadı',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                );
+              },
+              error: (err, stack) {
+                return Center(
+                  child: Text('Hata ${err.toString()}'),
+                );
+              },
+              loading: () => const CircularProgressIndicator()),
+        ],
       ),
     );
   }

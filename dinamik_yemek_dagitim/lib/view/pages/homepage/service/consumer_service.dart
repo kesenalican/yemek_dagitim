@@ -1,3 +1,4 @@
+import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/service/base_provider.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/homepage/model/consumer_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/homepage/viewmodel/consumer_view_model.dart';
@@ -12,7 +13,7 @@ final getConsumer = FutureProvider.autoDispose((ref) async {
   final viewModel = ref.watch(consumerViewModel);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String token = prefs.getString('token').toString();
-  final result = await dio.value!.get('Consumer/GetListConsumer',
+  final result = await dio.get('Consumer/GetListConsumer',
       options: Options(
         headers: {'Authorization': 'Bearer $token'},
         followRedirects: false,
@@ -33,7 +34,7 @@ final getConsumer = FutureProvider.autoDispose((ref) async {
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: Colors.white,
-      textColor: Colors.orange,
+      textColor: LightColor.orange,
       fontSize: 14,
     );
     return false;

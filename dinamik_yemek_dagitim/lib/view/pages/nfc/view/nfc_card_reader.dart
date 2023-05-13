@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
+import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/model/nfc_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/service/nfc_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/viewmodel/nfc_view_model.dart';
@@ -26,6 +27,7 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   bool serviceEnabled = false;
   PermissionStatus? permissionGranted;
   LocationData? locationData;
+  ValueNotifier<dynamic> result = ValueNotifier(null);
   Future<dynamic> getLocation() async {
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) serviceEnabled = await location.requestService();
@@ -40,7 +42,6 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
     gonderilecekLocation = '$latitude, $longitude';
   }
 
-  ValueNotifier<dynamic> result = ValueNotifier(null);
   @override
   Widget build(BuildContext context) {
     var viewModel = ref.watch(nfcViewModel);

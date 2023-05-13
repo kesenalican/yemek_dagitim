@@ -1,4 +1,5 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
+import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/model/login_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/service/login_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/email_field.dart';
@@ -89,13 +90,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             loginModel.setUserInfo(LoginModel(
                                 userName: emailController.text,
                                 password: passwordController.text));
-                            ref
-                                .watch(authProvider(LoginModel(
-                                        userName: emailController.text,
-                                        password: passwordController.text))
-                                    .future)
-                                .then((value) {
-                              print(value);
+                            showProgressDialog(context);
+                            ref.watch(authProvider.future).then((value) {
+                              dismissDialog(context);
                               if (value == true) {
                                 setState(() {
                                   _elementsOpacity = 0;

@@ -143,27 +143,59 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
     var getConsumers = ref.watch(getConsumer);
     var viewModel = ref.watch(consumerViewModel);
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 210,
-      child: SingleChildScrollView(
-        // physics: const BouncingScrollPhysics(),
-        // dragStartBehavior: DragStartBehavior.down,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            _search(),
-            //_categoryWidget(),
-            getConsumers.when(
-                data: (data) {
-                  consumerList = viewModel.consumerList!;
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    height: context.dynamicHeight * 0.7,
-                    width: AppTheme.fullWidth(context),
-                    child: ListView.builder(
-                      itemCount: consumerList.length,
-                      itemBuilder: (context, index) {
-                        return Container(
+      height: MediaQuery.of(context).size.height - 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _search(),
+          //_categoryWidget(),
+          getConsumers.when(
+              data: (data) {
+                consumerList = viewModel.consumerList!;
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  height: context.dynamicHeight * 0.6,
+                  width: AppTheme.fullWidth(context),
+                  child: ListView.builder(
+                    itemCount: consumerList.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                title: Text(
+                                  consumerList[index].name,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                children: [
+                                  SimpleDialogOption(
+                                    child: Column(
+                                      children: [
+                                        consumerInfo(index, 'T.C',
+                                            consumerList[index].identityNumber),
+                                        consumerInfo(index, 'Şehir',
+                                            consumerList[index].cityName),
+                                        consumerInfo(index, 'İlçe',
+                                            consumerList[index].countyName),
+                                        consumerInfo(index, 'Cadde',
+                                            consumerList[index].street),
+                                        consumerInfo(index, 'Detay',
+                                            consumerList[index].detail),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 15),
                           child: Container(
@@ -196,21 +228,49 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                               ],
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                error: (err, stack) {
-                  return Center(
-                    child: Text('Hata ${err.toString()}'),
-                  );
-                },
-                loading: () => const CircularProgressIndicator()),
-            //_productWidget(),
-          ],
-        ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              error: (err, stack) {
+                return Center(
+                  child: Text('Hata ${err.toString()}'),
+                );
+              },
+              loading: () => const CircularProgressIndicator()),
+          //_productWidget(),
+        ],
       ),
+    );
+  }
+
+  Row consumerInfo(int index, String fieldName, String field) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            fieldName,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Expanded(
+          flex: 1,
+          child: Text(
+            ':',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(flex: 2, child: Text(field)),
+      ],
     );
   }
 }
