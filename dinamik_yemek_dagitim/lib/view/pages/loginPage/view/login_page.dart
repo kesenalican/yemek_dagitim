@@ -9,6 +9,7 @@ import 'package:dinamik_yemek_dagitim/view/pages/loginPage/viewmodel/login_view_
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  bool rememberMe = false;
   double _elementsOpacity = 1;
   bool loadingBallAppear = false;
   double loadingBallSize = 1;
@@ -28,8 +30,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
+    loadLoginInfo();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void loadLoginInfo() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var userName = prefs.getString('user_name');
+      var password = prefs.getString('password');
+      rememberMe = prefs.getBool('remember_me')!;
+      setState(() {
+        rememberMe = true;
+        emailController.text = userName!;
+        passwordController.text = password!;
+      });
+      if (userName!.isEmpty || password!.isEmpty) {
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            return showToast('Uygulamaya Hoşgeldiniz');
+          },
+        );
+      }
+    } catch (e) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        return showToast('Kayıtlı Bilgiler Bulunamadı!');
+      });
+    }
   }
 
   @override
@@ -79,7 +114,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         PasswordField(
                             fadePassword: _elementsOpacity == 0,
                             passwordController: passwordController),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 20),
+                        CheckboxListTile(
+                          checkColor: Colors.white,
+                          activeColor: LightColor.orange,
+                          value: rememberMe,
+                          onChanged: buildRememberMeShared,
+                          title: const Text(
+                            'Beni Hatırla',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
                         GetStartedButton(
                           name: 'Giriş Yap',
                           elementsOpacity: _elementsOpacity,
@@ -115,7 +161,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               });
                             } else {}
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -126,5 +172,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void buildRememberMeShared(bool? value) async {
+    await SharedPreferences.getInstance().then((prefs) {
+      prefs.setString('user_name', emailController.text);
+      prefs.setString('password', passwordController.text);
+      prefs.setBool('remember_me', value!);
+    });
+    setState(() {
+      rememberMe = value!;
+    });
   }
 }
