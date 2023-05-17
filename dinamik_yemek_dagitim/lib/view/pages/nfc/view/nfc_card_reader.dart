@@ -1,11 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
-import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
-import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/model/nfc_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/service/nfc_service.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/nfc/viewmodel/nfc_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,7 +41,6 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = ref.watch(nfcViewModel);
     _tagRead();
     getLocation();
     return SizedBox(

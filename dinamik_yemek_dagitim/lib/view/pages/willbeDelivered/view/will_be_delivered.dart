@@ -34,62 +34,73 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
   }
 
   Widget _search() {
-    return InkWell(
-      onTap: () async {
-        await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2010),
-                builder: (context, child) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: const ColorScheme.light(
-                        primary: LightColor.orange,
-                        onPrimary: Colors.white,
-                        onSurface: LightColor.orange,
-                      ),
-                      textButtonTheme: TextButtonThemeData(
-                        style: TextButton.styleFrom(
-                          foregroundColor: LightColor.orange,
-                        ),
-                      ),
-                    ),
-                    child: child!,
-                  );
-                },
-                lastDate: DateTime(2050))
-            .then((secilenTarih) {
-          setState(() {
-            secilenTarih = orderDate;
-          });
-        });
-      },
-      child: Container(
-        margin: AppTheme.padding,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                height: 40,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: LightColor.lightGrey.withAlpha(100),
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: const TextField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Kişi Ara",
-                      hintStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.only(
-                          left: 10, right: 10, bottom: 0, top: 5),
-                      prefixIcon: Icon(Icons.search, color: Colors.black54)),
-                ),
+    return Container(
+      margin: AppTheme.padding,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: LightColor.lightGrey.withAlpha(100),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: const TextField(
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Kişi Ara",
+                    hintStyle: TextStyle(fontSize: 12),
+                    contentPadding:
+                        EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+                    prefixIcon: Icon(Icons.search, color: Colors.black54)),
               ),
             ),
-            const SizedBox(width: 20),
-            _icon(Icons.date_range, color: Colors.black54)
-          ],
-        ),
+          ),
+          const SizedBox(width: 20),
+          InkWell(
+            onTap: () async {
+              await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2010),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: LightColor.orange,
+                              onPrimary: Colors.white,
+                              onSurface: LightColor.orange,
+                            ),
+                            textButtonTheme: TextButtonThemeData(
+                              style: TextButton.styleFrom(
+                                foregroundColor: LightColor.orange,
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      lastDate: DateTime(2050))
+                  .then((secilenTarih) {
+                setState(() {
+                  secilenTarih = orderDate;
+                  setState(() {});
+                });
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(13)),
+                  color: Theme.of(context).colorScheme.onBackground,
+                  boxShadow: AppTheme.shadow),
+              child: const Icon(
+                Icons.date_range,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -116,8 +127,8 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
             ),
           ],
         ),
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             TitleText(
               text: 'Blabla falan',
               fontWeight: FontWeight.w700,
@@ -166,6 +177,7 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
         //     .toList(),
       ),
     );
+    
   }
 
   @override

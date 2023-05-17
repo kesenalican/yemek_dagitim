@@ -1,6 +1,5 @@
 //! ADRES - İSİM - TC
 
-import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/common/common_text_field.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_button.dart';
 import 'package:flutter/material.dart';

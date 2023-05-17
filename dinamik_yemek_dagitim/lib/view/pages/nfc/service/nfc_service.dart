@@ -1,7 +1,6 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/service/base_provider.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/model/nfc_model.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/nfc/viewmodel/nfc_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

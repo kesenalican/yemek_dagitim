@@ -1,18 +1,12 @@
-import 'package:dinamik_yemek_dagitim/config/route.dart';
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
-import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
-import 'package:dinamik_yemek_dagitim/routing/custom_route.dart';
 import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/homepage/view/home_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/service/login_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
-import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -29,7 +23,7 @@ void main() async {
       ),
     ),
     title: 'Dinamik Yemek Dağıtım',
-    home: LoginScreen(),
+    home: const LoginScreen(),
   )));
 }
 

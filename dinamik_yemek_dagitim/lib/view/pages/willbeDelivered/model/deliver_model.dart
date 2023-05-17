@@ -2,7 +2,6 @@
 //
 //     final deliver = deliverFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Deliver deliverFromJson(String str) => Deliver.fromJson(json.decode(str));

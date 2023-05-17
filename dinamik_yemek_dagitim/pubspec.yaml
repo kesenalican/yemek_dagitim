@@ -34,7 +34,6 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.3.2
   fluttertoast: ^8.2.1
-  google_fonts: ^2.1.0
   google_maps_flutter: ^2.1.9
   location: ^4.4.0
   nfc_manager: ^3.2.0
