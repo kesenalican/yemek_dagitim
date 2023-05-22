@@ -88,9 +88,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     tween: Tween(begin: 1, end: _elementsOpacity),
                     builder: (_, value, __) => Opacity(
                       opacity: value,
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Icon(Icons.food_bank,
                               size: 60, color: LightColor.orange),
                           SizedBox(height: 25),
@@ -143,11 +143,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 setState(() {
                                   _elementsOpacity = 0;
                                 });
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainPage()));
+                                        builder: (context) => const MainPage()),
+                                    (route) => route.isFirst);
                               }
                             });
                           },

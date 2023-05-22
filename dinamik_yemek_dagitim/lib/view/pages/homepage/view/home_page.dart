@@ -20,6 +20,8 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class MyHomePageState extends ConsumerState<MyHomePage> {
   List<ConsumerListModel> consumerList = [];
+  late List<ConsumerListModel> searchedConsumerList = [];
+  bool isSearched = false;
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
       padding: context.paddingDefault,
@@ -108,7 +110,7 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
     );
   }
 
-  Widget _search() {
+  Widget _search(List<ConsumerListModel>? consumerList) {
     return Card(
       margin: AppTheme.padding,
       child: Row(
@@ -128,11 +130,21 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                     contentPadding:
                         EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
                     prefixIcon: Icon(Icons.search, color: Colors.black54)),
+                onChanged: (value) {
+                  searchedConsumerList = consumerList!
+                      .where((element) => element.name
+                          .toLowerCase()
+                          .contains(value.toLowerCase()))
+                      .toList();
+                  setState(() {
+                    isSearched = true;
+                  });
+                },
               ),
             ),
           ),
-          const SizedBox(width: 20),
-          _icon(Icons.filter_list, color: Colors.black54)
+          //const SizedBox(width: 20),
+          //_icon(Icons.filter_list, color: Colors.black54)
         ],
       ),
     );
@@ -148,7 +160,7 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _search(),
+          _search(viewModel.consumerList),
           //_categoryWidget(),
           getConsumers.when(
               data: (data) {
@@ -158,7 +170,9 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                   height: context.dynamicHeight * 0.6,
                   width: AppTheme.fullWidth(context),
                   child: ListView.builder(
-                    itemCount: consumerList.length,
+                    itemCount: isSearched
+                        ? searchedConsumerList.length
+                        : consumerList.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
@@ -167,26 +181,103 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                             builder: (context) {
                               return SimpleDialog(
                                 title: Text(
-                                  consumerList[index].name,
+                                  isSearched
+                                      ? searchedConsumerList[index].name
+                                      : consumerList[index].name,
                                   style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 children: [
                                   SimpleDialogOption(
                                     child: Column(
                                       children: [
-                                        consumerInfo(index, 'T.C',
-                                            consumerList[index].identityNumber),
-                                        consumerInfo(index, 'Şehir',
-                                            consumerList[index].cityName),
-                                        consumerInfo(index, 'İlçe',
-                                            consumerList[index].countyName),
-                                        consumerInfo(index, 'Cadde',
-                                            consumerList[index].street),
-                                        consumerInfo(index, 'Detay',
-                                            consumerList[index].detail),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'T.C',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .identityNumber
+                                                  : consumerList[index]
+                                                      .identityNumber),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Şehir',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .cityName
+                                                  : consumerList[index]
+                                                      .cityName),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'İlçe',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .countyName
+                                                  : consumerList[index]
+                                                      .countyName),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Mahalle',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .neighborhoodName
+                                                  : consumerList[index]
+                                                      .neighborhoodName),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Cadde',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .street
+                                                  : consumerList[index].street),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Bina No',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .buildNo
+                                                  : consumerList[index]
+                                                      .buildNo),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Daire No',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .doorNo
+                                                  : consumerList[index].doorNo),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                              index,
+                                              'Detay',
+                                              isSearched
+                                                  ? searchedConsumerList[index]
+                                                      .detail
+                                                  : consumerList[index].detail),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -221,7 +312,9 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                             child: Row(
                               children: [
                                 TitleText(
-                                  text: consumerList[index].name,
+                                  text: isSearched
+                                      ? searchedConsumerList[index].name
+                                      : consumerList[index].name,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                 ),
@@ -254,8 +347,8 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
           child: Text(
             fieldName,
             style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -269,7 +362,14 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
             ),
           ),
         ),
-        Expanded(flex: 2, child: Text(field)),
+        Expanded(
+            flex: 2,
+            child: Text(
+              field,
+              style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: LightColor.subTitleTextColor),
+            )),
       ],
     );
   }

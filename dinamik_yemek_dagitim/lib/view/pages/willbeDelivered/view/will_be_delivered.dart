@@ -18,6 +18,8 @@ class WillBeDelivered extends ConsumerStatefulWidget {
 
 class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
   List<DeliverList> deliverList = [];
+  late List<DeliverList> searchedDeliverList = [];
+  bool isSearched = false;
   var orderDate = DateTime.now();
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
@@ -33,7 +35,7 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
     ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)));
   }
 
-  Widget _search() {
+  Widget _search(List<DeliverList>? deliverList) {
     return Container(
       margin: AppTheme.padding,
       child: Row(
@@ -45,15 +47,24 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
               decoration: BoxDecoration(
                   color: LightColor.lightGrey.withAlpha(100),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
-              child: const TextField(
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Kişi Ara",
-                    hintStyle: TextStyle(fontSize: 12),
-                    contentPadding:
-                        EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                    prefixIcon: Icon(Icons.search, color: Colors.black54)),
-              ),
+              child: TextFormField(
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Kişi Ara",
+                      hintStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.only(
+                          left: 10, right: 10, bottom: 0, top: 5),
+                      prefixIcon: Icon(Icons.search, color: Colors.black54)),
+                  onChanged: (value) {
+                    searchedDeliverList = deliverList!
+                        .where((element) => element.consumerName
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
+                        .toList();
+                    setState(() {
+                      isSearched = true;
+                    });
+                  }),
             ),
           ),
           const SizedBox(width: 20),
@@ -83,7 +94,7 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
                       lastDate: DateTime(2050))
                   .then((secilenTarih) {
                 setState(() {
-                  secilenTarih = orderDate;
+                  orderDate = secilenTarih!;
                   setState(() {});
                 });
               });
@@ -177,7 +188,6 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
         //     .toList(),
       ),
     );
-    
   }
 
   @override
@@ -190,10 +200,7 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _search(),
-          //_categoryWidget(),
-          //_productWidget(),
-
+          _search(viewModel.deliverList),
           getDelivery.when(
               data: (data) {
                 if (viewModel.deliverList != null) {
@@ -205,39 +212,99 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
                   width: AppTheme.fullWidth(context),
                   child: deliverList.isNotEmpty
                       ? ListView.builder(
-                          itemCount: deliverList.length,
+                          itemCount: isSearched
+                              ? searchedDeliverList.length
+                              : deliverList.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
+                            return InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      title: Text(
+                                        isSearched
+                                            ? searchedDeliverList[index]
+                                                .nameOfUser
+                                            : deliverList[index].nameOfUser,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      children: [
+                                        SimpleDialogOption(
+                                          child: Column(
+                                            children: [
+                                              consumerInfo(
+                                                  index,
+                                                  'T.C',
+                                                  isSearched
+                                                      ? searchedDeliverList[
+                                                              index]
+                                                          .consumerId
+                                                          .toString()
+                                                      : deliverList[index]
+                                                          .consumerId
+                                                          .toString()),
+                                              consumerInfo(
+                                                  index,
+                                                  'Adı',
+                                                  isSearched
+                                                      ? searchedDeliverList[
+                                                              index]
+                                                          .consumerName
+                                                      : deliverList[index]
+                                                          .consumerName),
+                                              consumerInfo(
+                                                  index,
+                                                  'Tarih',
+                                                  isSearched
+                                                      ? '${searchedDeliverList[index].createDate.year}/${searchedDeliverList[index].createDate.month}/${searchedDeliverList[index].createDate.day}'
+                                                      : '${deliverList[index].createDate.year}/${deliverList[index].createDate.month}/${deliverList[index].createDate.day}'),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               child: Container(
-                                padding: const EdgeInsets.all(20),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  color: LightColor.background,
-                                  border: Border.all(
-                                    color: LightColor.orange,
-                                    width: 2,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 15),
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                    color: LightColor.background,
+                                    border: Border.all(
+                                      color: LightColor.orange,
+                                      width: 2,
+                                    ),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0xfffbf2ef),
+                                        blurRadius: 10,
+                                        spreadRadius: 5,
+                                        offset: Offset(5, 5),
+                                      ),
+                                    ],
                                   ),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0xfffbf2ef),
-                                      blurRadius: 10,
-                                      spreadRadius: 5,
-                                      offset: Offset(5, 5),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    TitleText(
-                                      text: deliverList[index].consumerName,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 15,
-                                    ),
-                                  ],
+                                  child: Row(
+                                    children: [
+                                      TitleText(
+                                        text: isSearched
+                                            ? searchedDeliverList[index]
+                                                .consumerName
+                                            : deliverList[index].consumerName,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -261,6 +328,34 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
               loading: () => const CircularProgressIndicator()),
         ],
       ),
+    );
+  }
+
+  Row consumerInfo(int index, String fieldName, String field) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            fieldName,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Expanded(
+          flex: 1,
+          child: Text(
+            ':',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(flex: 2, child: Text(field)),
+      ],
     );
   }
 }

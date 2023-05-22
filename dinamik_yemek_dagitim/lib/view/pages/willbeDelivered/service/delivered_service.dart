@@ -33,6 +33,7 @@ final getDeliveryList =
     viewModel.deliverList = deliverList;
     return true;
   } else {
+    viewModel.deliverList = [];
     Fluttertoast.showToast(
       msg: '${result.data['message']}',
       toastLength: Toast.LENGTH_SHORT,

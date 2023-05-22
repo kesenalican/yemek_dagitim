@@ -1,10 +1,13 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/bottomNavigation/bottom_navigation_bar.dart';
+import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/view/will_be_delivered.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/themes/theme.dart';
 import 'homepage/view/home_page.dart';
@@ -31,12 +34,8 @@ class MainPageState extends State<MainPage> {
         children: [
           RotatedBox(
             quarterTurns: 4,
-            child: InkWell(
-                onTap: () {
-                  //! LOGOUT
-                },
-                child: _icon(Icons.power_settings_new_outlined,
-                    color: Colors.black54)),
+            child:
+                _icon(Icons.power_settings_new_outlined, color: Colors.black54),
           ),
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(13)),
@@ -75,7 +74,21 @@ class MainPageState extends State<MainPage> {
         icon,
         color: color,
       ),
-    ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)));
+    ).ripple(() async {
+      //! LOGOUT
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('token');
+      prefs.remove('expiration');
+      prefs.remove('user_name');
+      prefs.remove('password');
+      prefs.remove('remember_me');
+      if (context.mounted) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => route.isFirst);
+      }
+    }, borderRadius: const BorderRadius.all(Radius.circular(13)));
   }
 
   Widget _title() {
