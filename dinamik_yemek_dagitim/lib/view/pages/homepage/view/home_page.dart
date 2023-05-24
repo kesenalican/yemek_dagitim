@@ -288,9 +288,10 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                              horizontal: 10, vertical: 4),
                           child: Container(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 15),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius:

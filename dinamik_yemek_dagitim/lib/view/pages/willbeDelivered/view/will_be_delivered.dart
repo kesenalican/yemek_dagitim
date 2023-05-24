@@ -62,7 +62,9 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
                             .contains(value.toLowerCase()))
                         .toList();
                     setState(() {
-                      isSearched = true;
+                      searchedDeliverList.isEmpty
+                          ? isSearched = false
+                          : isSearched = true;
                     });
                   }),
             ),
@@ -116,79 +118,40 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
     );
   }
 
-  Container persons() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          color: LightColor.background,
-          border: Border.all(
-            color: Colors.green.shade700,
-            width: 2,
-          ),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0xfffbf2ef),
-              blurRadius: 10,
-              spreadRadius: 5,
-              offset: Offset(5, 5),
-            ),
-          ],
-        ),
-        child: const Row(
-          children: [
-            TitleText(
-              text: 'Blabla falan',
-              fontWeight: FontWeight.w700,
-              fontSize: 15,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _categoryWidget() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      width: AppTheme.fullWidth(context),
-      height: MediaQuery.of(context).size.height * 0.8,
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-          persons(),
-        ],
-        // children: AppData.categoryList
-        //     .map(
-        //       (category) => ProductIcon(
-        //         model: category,
-        //         onSelected: (model) {
-        //           setState(() {
-        //             AppData.categoryList.forEach((item) {
-        //               item.isSelected = false;
-        //             });
-        //             model.isSelected = true;
-        //           });
-        //         },
-        //       ),
-        //     )
-        //     .toList(),
-      ),
-    );
-  }
+  // Container persons() {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+  //     child: Container(
+  //       padding: const EdgeInsets.all(20),
+  //       alignment: Alignment.center,
+  //       decoration: BoxDecoration(
+  //         borderRadius: const BorderRadius.all(Radius.circular(10)),
+  //         color: LightColor.background,
+  //         border: Border.all(
+  //           color: Colors.green.shade700,
+  //           width: 2,
+  //         ),
+  //         boxShadow: const [
+  //           BoxShadow(
+  //             color: Color(0xfffbf2ef),
+  //             blurRadius: 10,
+  //             spreadRadius: 5,
+  //             offset: Offset(5, 5),
+  //           ),
+  //         ],
+  //       ),
+  //       child: const Row(
+  //         children: [
+  //           TitleText(
+  //             text: 'Blabla falan',
+  //             fontWeight: FontWeight.w700,
+  //             fontSize: 15,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -272,9 +235,10 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
                               },
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 15),
+                                    horizontal: 10, vertical: 4),
                                 child: Container(
-                                  padding: const EdgeInsets.all(20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(

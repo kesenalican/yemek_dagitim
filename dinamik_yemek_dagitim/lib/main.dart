@@ -1,5 +1,4 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
-import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/service/login_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
@@ -23,7 +22,7 @@ void main() async {
       ),
     ),
     title: 'Dinamik Yemek Dağıtım',
-    home: const LoginScreen(),
+    home: const MyFirstPage(),
   )));
 }
 
@@ -41,16 +40,23 @@ class _MyFirstPageState extends ConsumerState<MyFirstPage> {
   Future<bool> queryUser() async {
     isLoading = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
+    var token = prefs.getString('token');
     var expiration = prefs.getString('expiration');
-    if (token.isEmpty) {
+    var userName = prefs.getString('user_name');
+    if (token == null) {
       isUserActive = false;
       isLoading = false;
       firstOpen = true;
-      setState(() {});
+      prefs.remove('user_name');
+      prefs.remove('token');
+      prefs.remove('expiration');
+      prefs.remove('password');
+      prefs.remove('remember_me');
       return Future<bool>.value(false);
     } else {
-      if (DateTime.parse(expiration.toString()).day == DateTime.now().day) {
+      if (expiration != null &&
+          (DateTime.parse(expiration.toString()).millisecondsSinceEpoch <=
+              DateTime.now().millisecondsSinceEpoch)) {
         prefs.getString('token') == null;
         prefs.getString('expiration') == null;
         isUserActive = false;
@@ -58,43 +64,33 @@ class _MyFirstPageState extends ConsumerState<MyFirstPage> {
         firstOpen = true;
         return Future<bool>.value(false);
       } else {
-        isUserActive = true;
-        isLoading = false;
-        firstOpen = false;
-        setState(() {});
-        return Future<bool>.value(true);
+        if (userName != null) {
+          return await ref.watch(isUserActiveProvider.future).then((value) {
+            if (value == true) {
+              isUserActive = true;
+              isLoading = false;
+              firstOpen = false;
+              return Future<bool>.value(true);
+            } else {
+              isUserActive = false;
+              isLoading = false;
+              firstOpen = true;
+              return Future<bool>.value(false);
+            }
+          });
+        } else {
+          return Future<bool>.value(false);
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    queryUser().then((value) {
-      if (value == true) {
-        isUserActive = true;
-      } else {
-        isUserActive = false;
-        ref.watch(authProvider.future).then((value) {
-          if (value == true) {
-            isUserActive = true;
-            return;
-          } else {
-            firstOpen = true;
-            isUserActive = false;
-            showAlertDialog(
-              context,
-              'Kullanıcı Girişi Hatası',
-              'Lütfen yeniden giriş yapınız',
-            );
-          }
-        });
-      }
-    });
     return FutureBuilder(
       future: queryUser(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print('user aktifmi ? $isUserActive');
           return isLoading
               ? const Scaffold(
                   body: Center(
@@ -106,8 +102,7 @@ class _MyFirstPageState extends ConsumerState<MyFirstPage> {
                   ? const MainPage()
                   : const LoginScreen();
         } else {
-          return showAlertDialog(context, 'Servis Hatası',
-              'Lütfen internet bağlantınızın olduğundan emin veya uygulama yetkilisi ile iletişime geçin');
+          return const SizedBox();
         }
       },
     );

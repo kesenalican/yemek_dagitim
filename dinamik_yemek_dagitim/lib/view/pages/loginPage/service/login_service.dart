@@ -59,3 +59,33 @@ final authProvider = FutureProvider.autoDispose((ref) async {
     return result.data['status'];
   }
 });
+
+final isUserActiveProvider = FutureProvider.autoDispose((ref) async {
+  final dio = ref.watch(httpClientProvider);
+  final viewModel = ref.watch(loginViewModel);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var userName = prefs.getString('user_name');
+
+  final result = await dio.get(
+    'User/GetUserStatusByUserName',
+    queryParameters: {'userName': userName},
+    options: Options(
+      followRedirects: false,
+      validateStatus: (status) {
+        return status! <= 500;
+      },
+    ),
+  );
+  if (result.statusCode == 200) {
+    viewModel.isActive = true;
+    return true;
+  } else {
+    viewModel.isActive = false;
+    prefs.remove('user_name');
+    prefs.remove('token');
+    prefs.remove('expiration');
+    prefs.remove('password');
+    prefs.remove('remember_me');
+    return false;
+  }
+});

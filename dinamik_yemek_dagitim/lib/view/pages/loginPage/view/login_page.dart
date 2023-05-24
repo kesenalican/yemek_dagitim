@@ -60,11 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           },
         );
       }
-    } catch (e) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        return showToast('Kayıtlı Bilgiler Bulunamadı!');
-      });
-    }
+    } catch (e) {}
   }
 
   @override
@@ -147,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const MainPage()),
-                                    (route) => route.isFirst);
+                                    (route) => false);
                               }
                             });
                           },
