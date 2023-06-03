@@ -13,9 +13,11 @@ final nfcReader =
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String token = prefs.getString('token').toString();
   var formData = NfcModel(
-      id: nfcModel.id,
-      cardNumber: nfcModel.cardNumber,
-      coordinate: nfcModel.coordinate);
+    id: nfcModel.id,
+    cardNumber: nfcModel.cardNumber,
+    coordinate: nfcModel.coordinate,
+    readBarcode: nfcModel.readBarcode,
+  );
 
   final result = await dio.post(
     'Delivery/AddFoodMovement',
@@ -32,7 +34,7 @@ final nfcReader =
   if (result.statusCode == 200) {
     if (result.data['status'] == true) {
       Fluttertoast.showToast(
-        msg: '${result.data['message']}',
+        msg: 'Kart Başarıyla Okundu',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,

@@ -7,6 +7,7 @@ class LoginViewModel extends ChangeNotifier {
   String? token;
   bool isActive = false;
   String? expirationDate;
+  String? isReadBarcode;
   setUserInfo(LoginModel loginInfo) {
     loginModel = loginInfo;
     notifyListeners();

@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
+import 'package:dinamik_yemek_dagitim/view/common/open_barcode.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/loginPage/viewmodel/login_view_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/model/nfc_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/service/nfc_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
@@ -25,6 +28,7 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   PermissionStatus? permissionGranted;
   LocationData? locationData;
   ValueNotifier<dynamic> result = ValueNotifier(null);
+  String? _barcodeData;
   Future<dynamic> getLocation() async {
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) serviceEnabled = await location.requestService();
@@ -41,6 +45,8 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
 
   @override
   Widget build(BuildContext context) {
+    var viewModel = ref.watch(loginViewModel);
+
     _tagRead();
     getLocation();
     return SizedBox(
@@ -50,14 +56,41 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
         child: FutureBuilder<bool>(
           future: NfcManager.instance.isAvailable(),
           builder: (context, snapshot) => snapshot.data != true
-              ? const Center(
-                  child: Text(
-                  'Telefonunuzda NFC özelliğini açın!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: LightColor.orange,
-                  ),
-                ))
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Telefonunuzda NFC özelliğini açın!',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: LightColor.orange,
+                      ),
+                    ),
+                    viewModel.isReadBarcode == 'True'
+                        ? IconButton(
+                            onPressed: () async {
+                              await FlutterBarcodeScanner.scanBarcode(
+                                      '#000000', 'Geri', true, ScanMode.BARCODE)
+                                  .then((value) {
+                                print(value);
+                                ref.watch(nfcReader(
+                                  NfcModel(
+                                    cardNumber: value,
+                                    coordinate: gonderilecekLocation,
+                                    readBarcode: true,
+                                  ),
+                                ));
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.barcode_reader,
+                              color: LightColor.orange,
+                              size: 50,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
+                )
               : Stack(
                   children: [
                     OverflowBox(
@@ -69,6 +102,29 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
                         color: LightColor.orange.withOpacity(0.6),
                       ),
                     ),
+                    viewModel.isReadBarcode == 'True'
+                        ? IconButton(
+                            onPressed: () async {
+                              await FlutterBarcodeScanner.scanBarcode(
+                                      '#000000', 'Geri', true, ScanMode.BARCODE)
+                                  .then((value) {
+                                print(value);
+                                ref.watch(nfcReader(
+                                  NfcModel(
+                                    cardNumber: value,
+                                    coordinate: gonderilecekLocation,
+                                    readBarcode: true,
+                                  ),
+                                ));
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.barcode_reader,
+                              color: LightColor.orange,
+                              size: 50,
+                            ),
+                          )
+                        : const SizedBox(),
                     // IconButton(
                     //     onPressed: () {
                     //       setState(() {});
@@ -134,10 +190,12 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
         var bytes = result.value['nfca']['identifier'];
         var serialNumber = bytes
             .map((b) => b.toRadixString(16).padLeft(2, '0'))
-            .join(':')
+            .join()
             .toUpperCase();
         ref.watch(nfcReader(NfcModel(
-            coordinate: gonderilecekLocation, cardNumber: serialNumber)));
+            coordinate: gonderilecekLocation,
+            cardNumber: serialNumber,
+            readBarcode: false)));
       });
     });
   }

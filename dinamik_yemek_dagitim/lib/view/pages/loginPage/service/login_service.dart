@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final authProvider = FutureProvider.autoDispose((ref) async {
@@ -31,6 +32,9 @@ final authProvider = FutureProvider.autoDispose((ref) async {
       prefs.setString('token', token);
       prefs.setString('expiration', expiration);
       viewModel.token = token;
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      viewModel.isReadBarcode =
+          decodedToken['http://userswithoutidentity/claims/readBarcode'];
       viewModel.isActive = true;
       viewModel.expirationDate = expiration;
       return result.data['status'];

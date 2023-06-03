@@ -104,7 +104,7 @@ class MainPageState extends State<MainPage> {
                     TitleText(
                       text: isHomePageSelected
                           ? 'Yemek Dağıtım'
-                          : 'Yemek Verilecek',
+                          : 'Yemek Verilmiş',
                       fontSize: 27,
                       fontWeight: FontWeight.w400,
                     ),
