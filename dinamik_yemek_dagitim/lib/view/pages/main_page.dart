@@ -1,17 +1,21 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
 import 'package:dinamik_yemek_dagitim/view/bottomNavigation/bottom_navigation_bar.dart';
+import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/nfc/view/nfc_card_reader.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/service/start_day_service.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/view/start_day.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/view/will_be_delivered.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/themes/theme.dart';
 import 'homepage/view/home_page.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key, this.title});
 
   final String? title;
@@ -20,11 +24,20 @@ class MainPage extends StatefulWidget {
   MainPageState createState() => MainPageState();
 }
 
-class MainPageState extends State<MainPage> {
+class MainPageState extends ConsumerState<MainPage> {
   //? LOGOUT APPBAR
   bool isHomePageSelected = true;
   bool nfcSelected = false;
   int pageIndex = 0;
+  bool isStartDay = true;
+  Future<void> queryStartDay() async {
+    return await ref.watch(startDayControlProvider.future).then((value) {
+      setState(() {
+        isStartDay = value;
+      });
+    });
+  }
+
   Widget _appBar() {
     return Container(
       padding: AppTheme.padding,

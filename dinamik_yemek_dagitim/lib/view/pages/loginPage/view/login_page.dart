@@ -7,6 +7,8 @@ import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_button.dar
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/password_field.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/viewmodel/login_view_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/service/start_day_service.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/view/start_day.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,12 +28,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   double _elementsOpacity = 1;
   bool loadingBallAppear = false;
   double loadingBallSize = 1;
+  bool isStartDay = false;
   @override
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     loadLoginInfo();
     super.initState();
+  }
+
+  Future<void> queryStartDay() async {
+    return await ref.watch(startDayControlProvider.future).then((value) {
+      setState(() {
+        isStartDay = value;
+      });
+    });
   }
 
   @override
@@ -65,6 +76,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    queryStartDay();
     var loginModel = ref.watch(loginViewModel);
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -142,18 +154,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const MainPage()),
+                                        builder: (context) => !isStartDay
+                                            ? const StartDay()
+                                            : const MainPage()),
                                     (route) => false);
                               }
                             });
                           },
                           onAnimatinoEnd: () async {
                             if (loginModel.isActive == true) {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 500), () {
-                                setState(() {
-                                  loadingBallAppear = true;
-                                });
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                // setState(() {
+                                //   loadingBallAppear = true;
+                                // });
+                                loadingBallAppear = true;
                               });
                             } else {}
                           },

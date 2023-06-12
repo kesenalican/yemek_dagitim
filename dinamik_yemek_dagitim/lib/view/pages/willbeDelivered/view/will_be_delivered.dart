@@ -1,7 +1,9 @@
 import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/core/themes/theme.dart';
 import 'package:dinamik_yemek_dagitim/extensions/extensions.dart';
+import 'package:dinamik_yemek_dagitim/view/common/dialog_utils.dart';
 import 'package:dinamik_yemek_dagitim/view/common/title_text.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/service/start_day_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/model/deliver_model.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/service/delivered_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/willbeDelivered/viewmodel/deliver_view_model.dart';
@@ -159,137 +161,172 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
     var viewModel = ref.watch(deliverViewModel);
     return SizedBox(
       height: MediaQuery.of(context).size.height - 100,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _search(viewModel.deliverList),
-          getDelivery.when(
-              data: (data) {
-                if (viewModel.deliverList != null) {
-                  deliverList = viewModel.deliverList!;
-                }
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  height: context.dynamicHeight * 0.6,
-                  width: AppTheme.fullWidth(context),
-                  child: deliverList.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: isSearched
-                              ? searchedDeliverList.length
-                              : deliverList.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return SimpleDialog(
-                                      title: Text(
-                                        isSearched
-                                            ? searchedDeliverList[index]
-                                                .nameOfUser
-                                            : deliverList[index].nameOfUser,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      children: [
-                                        SimpleDialogOption(
-                                          child: Column(
-                                            children: [
-                                              consumerInfo(
-                                                  index,
-                                                  'T.C',
-                                                  isSearched
-                                                      ? searchedDeliverList[
-                                                              index]
-                                                          .consumerId
-                                                          .toString()
-                                                      : deliverList[index]
-                                                          .consumerId
-                                                          .toString()),
-                                              consumerInfo(
-                                                  index,
-                                                  'Adı',
-                                                  isSearched
-                                                      ? searchedDeliverList[
-                                                              index]
-                                                          .consumerName
-                                                      : deliverList[index]
-                                                          .consumerName),
-                                              consumerInfo(
-                                                  index,
-                                                  'Tarih',
-                                                  isSearched
-                                                      ? '${searchedDeliverList[index].createDate.year}/${searchedDeliverList[index].createDate.month}/${searchedDeliverList[index].createDate.day}'
-                                                      : '${deliverList[index].createDate.year}/${deliverList[index].createDate.month}/${deliverList[index].createDate.day}'),
-                                            ],
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 40,
+            right: 40,
+            left: 40,
+            child: InkWell(
+              onTap: () {
+                ref.watch(endDayProvider.future).then((value) {
+                  if (value == true) {
+                    showAlertDialog(
+                        context, 'Başarılı', 'Gün başarıyla sonlandırıldı');
+                  }
+                });
+              },
+              child: Container(
+                height: context.dynamicHeight * 0.06,
+                width: context.dynamicWidth,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: const Center(
+                    child: Text(
+                  'Günü Bitir',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )),
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _search(viewModel.deliverList),
+              getDelivery.when(
+                  data: (data) {
+                    if (viewModel.deliverList != null) {
+                      deliverList = viewModel.deliverList!;
+                    }
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      height: context.dynamicHeight * 0.6,
+                      width: AppTheme.fullWidth(context),
+                      child: deliverList.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: isSearched
+                                  ? searchedDeliverList.length
+                                  : deliverList.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return SimpleDialog(
+                                          title: Text(
+                                            isSearched
+                                                ? searchedDeliverList[index]
+                                                    .nameOfUser
+                                                : deliverList[index].nameOfUser,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          children: [
+                                            SimpleDialogOption(
+                                              child: Column(
+                                                children: [
+                                                  consumerInfo(
+                                                      index,
+                                                      'T.C',
+                                                      isSearched
+                                                          ? searchedDeliverList[
+                                                                  index]
+                                                              .consumerId
+                                                              .toString()
+                                                          : deliverList[index]
+                                                              .consumerId
+                                                              .toString()),
+                                                  consumerInfo(
+                                                      index,
+                                                      'Adı',
+                                                      isSearched
+                                                          ? searchedDeliverList[
+                                                                  index]
+                                                              .consumerName
+                                                          : deliverList[index]
+                                                              .consumerName),
+                                                  consumerInfo(
+                                                      index,
+                                                      'Tarih',
+                                                      isSearched
+                                                          ? '${searchedDeliverList[index].createDate.year}/${searchedDeliverList[index].createDate.month}/${searchedDeliverList[index].createDate.day}'
+                                                          : '${deliverList[index].createDate.year}/${deliverList[index].createDate.month}/${deliverList[index].createDate.day}'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
                                   },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 15),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                        color: LightColor.background,
+                                        border: Border.all(
+                                          color: LightColor.orange,
+                                          width: 2,
+                                        ),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color(0xfffbf2ef),
+                                            blurRadius: 10,
+                                            spreadRadius: 5,
+                                            offset: Offset(5, 5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          TitleText(
+                                            text: isSearched
+                                                ? searchedDeliverList[index]
+                                                    .consumerName
+                                                : deliverList[index]
+                                                    .consumerName,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 15),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
-                                    color: LightColor.background,
-                                    border: Border.all(
-                                      color: LightColor.orange,
-                                      width: 2,
-                                    ),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color(0xfffbf2ef),
-                                        blurRadius: 10,
-                                        spreadRadius: 5,
-                                        offset: Offset(5, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      TitleText(
-                                        text: isSearched
-                                            ? searchedDeliverList[index]
-                                                .consumerName
-                                            : deliverList[index].consumerName,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                            )
+                          : const Center(
+                              child: Text(
+                                'Bugüne ait dağıtım listesi bulunamadı',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            );
-                          },
-                        )
-                      : const Center(
-                          child: Text(
-                            'Bugüne ait dağıtım listesi bulunamadı',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                );
-              },
-              error: (err, stack) {
-                return Center(
-                  child: Text('Hata ${err.toString()}'),
-                );
-              },
-              loading: () => const CircularProgressIndicator()),
+                            ),
+                    );
+                  },
+                  error: (err, stack) {
+                    return Center(
+                      child: Text('Hata ${err.toString()}'),
+                    );
+                  },
+                  loading: () => const CircularProgressIndicator()),
+            ],
+          ),
         ],
       ),
     );

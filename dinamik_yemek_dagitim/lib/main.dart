@@ -2,6 +2,8 @@ import 'package:dinamik_yemek_dagitim/core/themes/light_color.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/service/login_service.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/loginPage/view/login_page.dart';
 import 'package:dinamik_yemek_dagitim/view/pages/main_page.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/service/start_day_service.dart';
+import 'package:dinamik_yemek_dagitim/view/pages/startdaypage/view/start_day.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +25,7 @@ void main() async {
     ),
     title: 'Dinamik Yemek Dağıtım',
     home: const MyFirstPage(),
+    //home: const StartDay(),
   )));
 }
 
@@ -37,6 +40,7 @@ class _MyFirstPageState extends ConsumerState<MyFirstPage> {
   bool isLoading = false;
   bool isUserActive = false;
   bool firstOpen = false;
+
   Future<bool> queryUser() async {
     isLoading = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
