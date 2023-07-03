@@ -265,8 +265,11 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                                               'Daire No',
                                               isSearched
                                                   ? searchedConsumerList[index]
-                                                      .doorNo
-                                                  : consumerList[index].doorNo),
+                                                          .doorNo ??
+                                                      ''
+                                                  : consumerList[index]
+                                                          .doorNo ??
+                                                      ''),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -277,6 +280,20 @@ class MyHomePageState extends ConsumerState<MyHomePage> {
                                                   ? searchedConsumerList[index]
                                                       .detail
                                                   : consumerList[index].detail),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: consumerInfo(
+                                            index,
+                                            'Kişi Sayısı',
+                                            isSearched
+                                                ? searchedConsumerList[index]
+                                                    .peopleCount
+                                                    .toString()
+                                                : consumerList[index]
+                                                    .peopleCount
+                                                    .toString(),
+                                          ),
                                         ),
                                       ],
                                     ),

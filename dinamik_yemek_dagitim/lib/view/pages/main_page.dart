@@ -150,12 +150,29 @@ class MainPageState extends ConsumerState<MainPage> {
             !isHomePageSelected
                 ? Container(
                     padding: context.paddingDefault,
-                    child: const Icon(
-                      Icons.delete_outline,
-                      color: LightColor.orange,
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.stop,
+                          color: LightColor.orange,
+                        ),
+                        Text(
+                          'Günü Bitir',
+                          style: TextStyle(
+                              color: LightColor.orange,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
-                  ).ripple(() {},
-                    borderRadius: const BorderRadius.all(Radius.circular(13)))
+                  ).ripple(() {
+                    ref.watch(endDayProvider.future).then((value) {
+                      if (value == true) {
+                        showAlertDialog(
+                            context, 'Başarılı', 'Gün başarıyla sonlandırıldı');
+                        setState(() {});
+                      }
+                    });
+                  }, borderRadius: const BorderRadius.all(Radius.circular(13)))
                 : const SizedBox()
           ],
         ));

@@ -27,6 +27,7 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   bool serviceEnabled = false;
   PermissionStatus? permissionGranted;
   LocationData? locationData;
+  bool waiting = false;
   ValueNotifier<dynamic> result = ValueNotifier(null);
   String? _barcodeData;
   Future<dynamic> getLocation() async {
@@ -46,7 +47,6 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   @override
   Widget build(BuildContext context) {
     var viewModel = ref.watch(loginViewModel);
-
     _tagRead();
     getLocation();
     return SizedBox(
@@ -181,21 +181,32 @@ class _NfcCardReaderState extends ConsumerState<NfcCardReader> {
   }
 
   void _tagRead() {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      result.value = tag.data;
-      NfcManager.instance.stopSession();
-      setState(() {
-        Fluttertoast.showToast(msg: 'KART BAŞARIYLA OKUNDU');
-        print(result.value['nfca']['identifier']);
-        var bytes = result.value['nfca']['identifier'];
-        var serialNumber = bytes
-            .map((b) => b.toRadixString(16).padLeft(2, '0'))
-            .join()
-            .toUpperCase();
-        ref.watch(nfcReader(NfcModel(
-            coordinate: gonderilecekLocation,
-            cardNumber: serialNumber,
-            readBarcode: false)));
+    Future.delayed(Duration(seconds: waiting ? 10 : 1), () {
+      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+        result.value = tag.data;
+        NfcManager.instance.stopSession();
+        setState(() {
+          // Fluttertoast.showToast(msg: 'KART BAŞARIYLA OKUNDU');
+          print(result.value['nfca']['identifier']);
+          var bytes = result.value['nfca']['identifier'];
+          var serialNumber = bytes
+              .map((b) => b.toRadixString(16).padLeft(2, '0'))
+              .join()
+              .toUpperCase();
+          ref
+              .watch(nfcReader(NfcModel(
+                      coordinate: gonderilecekLocation,
+                      cardNumber: serialNumber,
+                      readBarcode: false))
+                  .future)
+              .then((value) {
+            if (value == true) {
+              setState(() {
+                waiting = true;
+              });
+            }
+          });
+        });
       });
     });
   }

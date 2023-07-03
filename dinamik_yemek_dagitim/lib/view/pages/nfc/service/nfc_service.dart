@@ -34,7 +34,7 @@ final nfcReader =
   if (result.statusCode == 200) {
     if (result.data['status'] == true) {
       Fluttertoast.showToast(
-        msg: 'Kart Başarıyla Okundu',
+        msg: result.data['message'],
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -45,7 +45,7 @@ final nfcReader =
       return true;
     } else {
       Fluttertoast.showToast(
-        msg: '${result.data['message']}',
+        msg: result.data['message'],
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,

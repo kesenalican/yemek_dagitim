@@ -46,53 +46,54 @@ class ConsumerListModel {
   final int neighborhoodId;
   final String street;
   final String buildNo;
-  final String doorNo;
+  final String? doorNo;
   final String detail;
   final dynamic coordinate;
   final int id;
   final DateTime createDate;
   final bool isActive;
+  final int peopleCount;
 
-  ConsumerListModel({
-    required this.cityName,
-    required this.countyName,
-    required this.neighborhoodName,
-    required this.identityNumber,
-    required this.name,
-    required this.phone,
-    required this.cityId,
-    required this.countyId,
-    required this.neighborhoodId,
-    required this.street,
-    required this.buildNo,
-    required this.doorNo,
-    required this.detail,
-    required this.coordinate,
-    required this.id,
-    required this.createDate,
-    required this.isActive,
-  });
+  ConsumerListModel(
+      {required this.cityName,
+      required this.countyName,
+      required this.neighborhoodName,
+      required this.identityNumber,
+      required this.name,
+      required this.phone,
+      required this.cityId,
+      required this.countyId,
+      required this.neighborhoodId,
+      required this.street,
+      required this.buildNo,
+      required this.doorNo,
+      required this.detail,
+      required this.coordinate,
+      required this.id,
+      required this.createDate,
+      required this.isActive,
+      required this.peopleCount});
 
   factory ConsumerListModel.fromJson(Map<String, dynamic> json) =>
       ConsumerListModel(
-        cityName: json["cityName"],
-        countyName: json["countyName"],
-        neighborhoodName: json["neighborhoodName"],
-        identityNumber: json["identityNumber"],
-        name: json["name"],
-        phone: json["phone"],
-        cityId: json["cityId"],
-        countyId: json["countyId"],
-        neighborhoodId: json["neighborhoodId"],
-        street: json["street"],
-        buildNo: json["buildNo"],
-        doorNo: json["doorNo"],
-        detail: json["detail"] ?? '',
-        coordinate: json["coordinate"],
-        id: json["id"],
-        createDate: DateTime.parse(json["createDate"]),
-        isActive: json["isActive"],
-      );
+          cityName: json["cityName"],
+          countyName: json["countyName"],
+          neighborhoodName: json["neighborhoodName"],
+          identityNumber: json["identityNumber"],
+          name: json["name"],
+          phone: json["phone"],
+          cityId: json["cityId"],
+          countyId: json["countyId"],
+          neighborhoodId: json["neighborhoodId"],
+          street: json["street"],
+          buildNo: json["buildNo"],
+          doorNo: json["doorNo"],
+          detail: json["detail"] ?? '',
+          coordinate: json["coordinate"],
+          id: json["id"],
+          createDate: DateTime.parse(json["createDate"]),
+          isActive: json["isActive"],
+          peopleCount: json["peopleCount"]);
 
   Map<String, dynamic> toJson() => {
         "cityName": cityName,
@@ -112,5 +113,6 @@ class ConsumerListModel {
         "id": id,
         "createDate": createDate.toIso8601String(),
         "isActive": isActive,
+        "peopleCount": peopleCount,
       };
 }

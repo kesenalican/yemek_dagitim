@@ -163,36 +163,36 @@ class _WillBeDeliveredState extends ConsumerState<WillBeDelivered> {
       height: MediaQuery.of(context).size.height - 100,
       child: Stack(
         children: [
-          Positioned(
-            bottom: 40,
-            right: 40,
-            left: 40,
-            child: InkWell(
-              onTap: () {
-                ref.watch(endDayProvider.future).then((value) {
-                  if (value == true) {
-                    showAlertDialog(
-                        context, 'Başarılı', 'Gün başarıyla sonlandırıldı');
-                  }
-                });
-              },
-              child: Container(
-                height: context.dynamicHeight * 0.06,
-                width: context.dynamicWidth,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: const Center(
-                    child: Text(
-                  'Günü Bitir',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 40,
+          //   right: 40,
+          //   left: 40,
+          //   child: InkWell(
+          //     onTap: () {
+          //       ref.watch(endDayProvider.future).then((value) {
+          //         if (value == true) {
+          //           showAlertDialog(
+          //               context, 'Başarılı', 'Gün başarıyla sonlandırıldı');
+          //         }
+          //       });
+          //     },
+          //     child: Container(
+          //       height: context.dynamicHeight * 0.06,
+          //       width: context.dynamicWidth,
+          //       margin: const EdgeInsets.symmetric(horizontal: 20),
+          //       decoration: const BoxDecoration(
+          //         color: Colors.red,
+          //         borderRadius: BorderRadius.all(Radius.circular(10)),
+          //       ),
+          //       child: const Center(
+          //           child: Text(
+          //         'Günü Bitir',
+          //         style: TextStyle(
+          //             color: Colors.white, fontWeight: FontWeight.bold),
+          //       )),
+          //     ),
+          //   ),
+          // ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
